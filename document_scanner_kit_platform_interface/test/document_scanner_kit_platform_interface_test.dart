@@ -2,11 +2,7 @@ import 'package:document_scanner_kit_platform_interface/document_scanner_kit_pla
 import 'package:flutter_test/flutter_test.dart';
 
 class DocumentScannerKitMock extends DocumentScannerKitPlatform {
-  static const mockPlatformName = 'Mock';
   static const mockScanResult = ['path1', 'path2'];
-
-  @override
-  Future<String?> getPlatformName() async => mockPlatformName;
 
   @override
   Future<List<String>?> scan() async => mockScanResult;
@@ -20,15 +16,6 @@ void main() {
     setUp(() {
       documentScannerKitPlatform = DocumentScannerKitMock();
       DocumentScannerKitPlatform.instance = documentScannerKitPlatform;
-    });
-
-    group('getPlatformName', () {
-      test('returns correct name', () async {
-        expect(
-          await DocumentScannerKitPlatform.instance.getPlatformName(),
-          equals(DocumentScannerKitMock.mockPlatformName),
-        );
-      });
     });
 
     group('scan', () {

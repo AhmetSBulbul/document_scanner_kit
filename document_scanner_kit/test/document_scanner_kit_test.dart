@@ -19,25 +19,16 @@ void main() {
       DocumentScannerKitPlatform.instance = documentScannerKitPlatform;
     });
 
-    group('getPlatformName', () {
-      test('returns correct name when platform implementation exists',
+    group('scan', () {
+      test('returns list with file paths when platform implementation exists',
           () async {
-        const platformName = '__test_platform__';
+        const filePaths = ['file1', 'file2'];
         when(
-          () => documentScannerKitPlatform.getPlatformName(),
-        ).thenAnswer((_) async => platformName);
+          () => documentScannerKitPlatform.scan(),
+        ).thenAnswer((_) async => filePaths);
 
-        final actualPlatformName = await getPlatformName();
-        expect(actualPlatformName, equals(platformName));
-      });
-
-      test('throws exception when platform implementation is missing',
-          () async {
-        when(
-          () => documentScannerKitPlatform.getPlatformName(),
-        ).thenAnswer((_) async => null);
-
-        expect(getPlatformName, throwsException);
+        final actualResult = await scan();
+        expect(actualResult, equals(filePaths));
       });
     });
   });

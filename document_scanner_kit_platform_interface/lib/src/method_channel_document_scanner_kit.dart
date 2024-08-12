@@ -9,11 +9,6 @@ class MethodChannelDocumentScannerKit extends DocumentScannerKitPlatform {
   final methodChannel = const MethodChannel('document_scanner_kit');
 
   @override
-  Future<String?> getPlatformName() {
-    return methodChannel.invokeMethod<String>('getPlatformName');
-  }
-
-  @override
   Future<List<String>?> scan() {
     return methodChannel.invokeListMethod<String>('scan');
   }

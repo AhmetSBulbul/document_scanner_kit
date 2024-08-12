@@ -22,7 +22,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  String? _platformName;
   List<String>? _scannedImages;
 
   @override
@@ -35,33 +34,6 @@ class _HomePageState extends State<HomePage> {
             mainAxisAlignment: MainAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
             children: [
-              if (_platformName == null)
-                const SizedBox.shrink()
-              else
-                Text(
-                  'Platform Name: $_platformName',
-                  style: Theme.of(context).textTheme.headlineSmall,
-                ),
-              const SizedBox(height: 16),
-              ElevatedButton(
-                onPressed: () async {
-                  if (!context.mounted) return;
-                  try {
-                    final result = await getPlatformName();
-                    setState(() => _platformName = result);
-                  } catch (error) {
-                    if (!context.mounted) return;
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        backgroundColor: Theme.of(context).primaryColor,
-                        content: Text('$error'),
-                      ),
-                    );
-                  }
-                },
-                child: const Text('Get Platform Name'),
-              ),
-              const SizedBox(height: 16),
               if (_scannedImages == null)
                 const SizedBox.shrink()
               else

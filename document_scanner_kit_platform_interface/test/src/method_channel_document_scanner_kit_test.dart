@@ -4,9 +4,9 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
-  const kPlatformName = 'platformName';
 
   group('$MethodChannelDocumentScannerKit', () {
+    const kScanResult = ['path1', 'path2'];
     late MethodChannelDocumentScannerKit methodChannelDocumentScannerKit;
     final log = <MethodCall>[];
 
@@ -18,8 +18,8 @@ void main() {
         (methodCall) async {
           log.add(methodCall);
           switch (methodCall.method) {
-            case 'getPlatformName':
-              return kPlatformName;
+            case 'scan':
+              return kScanResult;
             default:
               return null;
           }
@@ -29,13 +29,13 @@ void main() {
 
     tearDown(log.clear);
 
-    test('getPlatformName', () async {
-      final platformName = await methodChannelDocumentScannerKit.getPlatformName();
+    test('scan returns correct paths', () async {
+      final result = await methodChannelDocumentScannerKit.scan();
       expect(
         log,
-        <Matcher>[isMethodCall('getPlatformName', arguments: null)],
+        <Matcher>[isMethodCall('scan', arguments: null)],
       );
-      expect(platformName, equals(kPlatformName));
+      expect(result, equals(kScanResult));
     });
   });
 }

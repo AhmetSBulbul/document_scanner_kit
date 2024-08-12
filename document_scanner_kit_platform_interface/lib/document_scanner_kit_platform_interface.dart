@@ -29,9 +29,6 @@ abstract class DocumentScannerKitPlatform extends PlatformInterface {
     _instance = instance;
   }
 
-  /// Return the current platform name.
-  Future<String?> getPlatformName();
-
   /// Start the document scanner.
   ///
   /// The scanner will be started and the user will be able to scan a document.

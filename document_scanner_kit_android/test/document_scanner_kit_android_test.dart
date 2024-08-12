@@ -7,7 +7,6 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   group('DocumentScannerKitAndroid', () {
-    const kPlatformName = 'Android';
     const kScanResult = ['path1', 'path2'];
     late DocumentScannerKitAndroid documentScannerKit;
     late List<MethodCall> log;
@@ -21,8 +20,6 @@ void main() {
               (methodCall) async {
         log.add(methodCall);
         switch (methodCall.method) {
-          case 'getPlatformName':
-            return kPlatformName;
           case 'scan':
             return kScanResult;
           default:
@@ -35,15 +32,6 @@ void main() {
       DocumentScannerKitAndroid.registerWith();
       expect(DocumentScannerKitPlatform.instance,
           isA<DocumentScannerKitAndroid>());
-    });
-
-    test('getPlatformName returns correct name', () async {
-      final name = await documentScannerKit.getPlatformName();
-      expect(
-        log,
-        <Matcher>[isMethodCall('getPlatformName', arguments: null)],
-      );
-      expect(name, equals(kPlatformName));
     });
 
     test('scan returns correct paths', () async {
