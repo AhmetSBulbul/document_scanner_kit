@@ -22,46 +22,62 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List<String>? _scannedImages;
+  List<String> _scannedImages = [];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('DocumentScannerKit Example')),
       body: Center(
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              if (_scannedImages == null)
-                const SizedBox.shrink()
-              else
-                Column(
-                  children: [
-                    for (final path in _scannedImages!) Image.file(File(path)),
-                  ],
-                ),
-              const SizedBox(height: 16),
-              ElevatedButton(
-                  onPressed: () async {
-                    if (!context.mounted) return;
-                    try {
-                      final result = await scan();
-                      setState(() => _scannedImages = result);
-                    } catch (error) {
-                      if (!context.mounted) return;
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          backgroundColor: Theme.of(context).primaryColor,
-                          content: Text('$error'),
-                        ),
-                      );
+        child: Column(
+          children: [
+            Expanded(
+              child: _scannedImages.isEmpty
+                  ? const Center(child: Text('No images to display'))
+                  : GridView.builder(
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 3,
+                        crossAxisSpacing: 8,
+                        mainAxisSpacing: 8,
+                      ),
+                      padding: const EdgeInsets.all(8),
+                      itemCount: _scannedImages.length,
+                      itemBuilder: (context, index) {
+                        return Image.file(
+                          File(_scannedImages[index]),
+                          fit: BoxFit.cover,
+                        );
+                      },
+                    ),
+            ),
+            const SizedBox(height: 16),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ElevatedButton(
+                onPressed: () async {
+                  if (!context.mounted) return;
+                  try {
+                    final result = await scan();
+                    if (result != null) {
+                      setState(() {
+                        _scannedImages.addAll(result);
+                      });
                     }
-                  },
-                  child: const Text('Scan Document')),
-            ],
-          ),
+                  } catch (error) {
+                    if (!context.mounted) return;
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        backgroundColor: Theme.of(context).primaryColor,
+                        content: Text('$error'),
+                      ),
+                    );
+                  }
+                },
+                child: Text('Scan Document'),
+              ),
+            ),
+          ],
         ),
       ),
     );
